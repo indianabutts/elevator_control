@@ -9,12 +9,16 @@ module elevator_queue_tb;
    logic deassert_floor;
    logic [2:0] requested_floor;
    logic [p_FLOOR_COUNT-1:0] queue_status;
-
-
-   elevator_queue #(.FLOOR_COUNT(p_FLOOR_COUNT)) DUT 
+   logic [7:0] 		     button_panel_light;
+   logic [7:0] 		     buttons;
+   
+   elevator_queue #(.FLOOR_COUNT(p_FLOOR_COUNT)) QUEUE 
      (.*);
    
-
+   
+   elevator_input_panel PANEL
+     (.*);
+   
    //Set the initial conditions for the testbench
    initial
      begin
