@@ -9,14 +9,13 @@ module elevator_queue #(parameter FLOOR_COUNT = 7)
    (
     input logic 		   clk,
     input logic 		   reset,
+    input logic 		   r_nwr,
     input logic 		   deassert_floor,
     input logic [2:0] 		   requested_floor,
     output logic [FLOOR_COUNT-1:0] queue_status
     );
    
    logic [FLOOR_COUNT-1:0] 	   local_queue_status;
-
-   assign queue_status<=
    
    always_ff @ (posedge clk)
      begin
