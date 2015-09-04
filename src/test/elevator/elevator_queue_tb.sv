@@ -38,6 +38,11 @@ module elevator_queue_tb;
                r_nwr<=1'b0;
 	       requested_floor<=3'b010;
 	    end
+	  4:
+	    begin
+               r_nwr<=1'b0;
+	       requested_floor<=3'b011;
+	    end
 	  6:
 	    begin
 	       r_nwr<=0;
