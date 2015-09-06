@@ -13,9 +13,32 @@ module elevator_model(
 		      );
    
    logic 				 stop_next;
+   logic 				 time_unit;
+   logic [19:0] 			 time_unit_divider;
    
    always_ff@(posedge clk)
-     begin
+     begin:"TIME_DIVIDER"
+	if(reset)
+	  begin
+	     time_unit<=0;
+	     
+	  end
+	else
+	  begin
+	     time_unit_divider++;
+	     time_unit<=0;
+	     
+	     if(time_unit_divider===1000000)
+	       begin
+		  time_unit<=1;
+		  time_unit_divider<=0;
+		  
+	       end
+	  end
+     end
+   
+   always_ff@(posedge clk)
+     begin:"MAIN_FSM"
 	if(reset)
 	  begin
 	     current_up_ndown<=0;
