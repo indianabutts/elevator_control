@@ -3,12 +3,11 @@
 
 
 module elevator_direction_resolver(
-			//     input logic       clk,
-			  //   input logic       reset,
-			     input logic       in_up_ndown,
+			     input logic       current_up_ndown,
 			     input logic [6:0] queue_status,
 			     input logic [2:0] current_floor,
-			     output logic      out_up_ndown
+			     output logic      queue_empty,
+			     output logic      next_up_ndown
 			     );
 
    logic 					l_up;
@@ -26,8 +25,27 @@ module elevator_direction_resolver(
    assign l_up = (queue_status[6:current_floor] || 1'b1);
    
    assign l_down = (queue_status[current_floor:0] || 1'b1);
+   
+   always_comb
+     begin:"NEXT_DIRECTION"
+	if(l_up & !l_down)
+	  begin
+	     next_up_ndown=1'b1;
+	  end
+	else if (l_down & !l_up)
+	  begin
+	     next_up_ndown<=1'b0;	     
+	  end
+	else if (l_down & l_up )
+	  begin
+	     next_up_ndown = l_up & current_up_ndown;
+	     
+	  end
+     end
+   
 
-   assign out_up_ndown = (l_up & in_up_ndown);
+   assign queue_empty = !(l_up | l_down);
+   
    
 
 endmodule // elevator_direction_resolver

@@ -2,96 +2,121 @@
 
 
 module elevator_model(
+		      input logic 	 clk,
+		      input logic 	 reset,
+		      input logic 	 queue_empty,
+		      input logic 	 next_up_ndown,
+		      input logic [2:0]  default_floor,
+		      input logic [6:0]  queue_status,
+		      output logic 	 current_up_ndown, 
+		      output logic [2:0] current_floor
 		      );
-
-
-
-
-
-   always_comb
-     begin
-       
-     end
    
+   logic 				 stop_next;
    
    always_ff@(posedge clk)
      begin
 	if(reset)
 	  begin
+	     current_up_ndown<=0;
+	     current_floor<=default_floor;
+	     stop_next<=0;
+	     
 	  end
 	else
 	  begin
-	     moving<=0;
-	     i=0;
+	     current_up_ndown<=next_up_ndown;
+	     
 	     case(state)
 	       2'b00://PARKED
 		 begin
-		    if(!queue_empty)
-		      begin
-			 state<=2'b01;
-		      end
+		 if(!queue_empty & time_unit)
+		   begin
+		      state<=2'b01;
+		   end
+		 else
+		   begin
+		      if(current_floor!=default_floor)
+			begin
+			   if(time_unit)
+			     begin
+				if((default_floor<current_floor))
+				  begin
+				     current_floor--;
+				       end
+				else
+				  begin
+				     current_floor++;
+				  end
+			     end
+			     
+			end
+		   end
 		 end
 	       2'b01://PREPARE TO MOVE
 		 begin
+		    current_up_ndown<=next_up_ndown;
+		    state<=2'b11;
 		    
-		    if(moving===1'b0)
-		      begin
-			 (queue_status[i]==1'b1)
-			i++;
-			 
-		      end
-		    if(time_unit_counter === 5　&& moving===1'b0 )
-		      begin
-			 state<=2'b11;
-		      end
-		    else
-		      begin
-			 state<=2'b11; 
-		      end
 		 end
 	       2'b11://MOVE
 		 begin
-		    moving<=1;
-		    //IF not at the destianation, then wait 5 seconds, and
-		    //change floor based on direction.
-		    //If floor reached, move to disembark state.
-		    if(current_floor!=destination_floor)
+		    if(!stop_next)
 		      begin
-			 if(time_unit_counter === 5)
+			 
+		      
+			 if(current_up_ndown)
 			   begin
-			      if(up_ndown)
+			      if(queue_status[current_floor+1])
 				begin
-				   current_floor++;
+				   stop_next<=1;
+				end
+			      
+			   end
+			 else if(!current_up_ndown)
+			   begin
+			      if(queue_status[current_floor-1])
+				begin
+				   stop_next<=1;
+				end
+			   end
+			 
+			 
+			 if(time_unit)
+			   begin
+			      if(current_up_ndown)
+				begin
+				   current_floor++;	   
 				end
 			      else
 				begin
-				   current_floor--;
+				   current_floor--
 				end
-			   end // if (time_unit_counter === 5)
-		      end // if (current_floor!=destination_floor)
+			   end
+		      end // if (!stop_next)
 		    else
 		      begin
-			 state<=2'b11;
-		      end
+			 state<=2'b10;
+			 stop_next<=0;
+			 
+		      end // else: !if(!stop_next)
 		    
 		 end
 	       2'b10://DISEMBARK
 		 begin
-		    moving<=1;
-		    //After 5 seconds, close doors, and check.
-		    // if queue empty, go to the park state.
-		    // if queue no empty, prepare to move.
-		    if(time_unit_counter === 5)
+		    if(time_unit)
 		      begin
-			 if(!queue_empty)
-			   begin
-			      state<=2'b01;
-			   end
-			 else
+			 if(queue_empty)
 			   begin
 			      state<=2'b00;
 			   end
+			 else
+			   begin
+			      state<=2'b01;
+			      
+			   end
 		      end
+		 
 		 end
 	     endcase
 	  end
