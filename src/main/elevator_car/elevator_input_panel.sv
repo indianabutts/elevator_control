@@ -54,10 +54,10 @@ module elevator_input_panel
 
    //Since queue_status is a registered output from the queue,
    //we dont need to make it an ff block here.
-   assign button2_panel_light = queue_status;
+   assign button_panel_light = queue_status;
    
    
-   always_ff@(posedge clk)
+   always_ff@(posedge clk or posedge reset)
      begin
 	if(reset)
 	  begin

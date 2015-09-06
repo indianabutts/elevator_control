@@ -16,8 +16,11 @@ module elevator_queue #(parameter FLOOR_COUNT = 7)
     );
    
    logic [FLOOR_COUNT-1:0] 	   local_queue_status;
+
+   assign queue_status<= local_queue_status;
    
-   always_ff @ (posedge clk)
+   
+   always_ff @ (posedge clk and posedge reset)
      begin
 	if(reset)
 	  begin
@@ -38,7 +41,7 @@ module elevator_queue #(parameter FLOOR_COUNT = 7)
 	       end // if (!r_nwr)
 	     else
 	       begin
-		  queue_status<=local_queue_status;
+		 // queue_status<=local_queue_status;
 	       end // else: !if(!r_nwr)
 	  end
      end
