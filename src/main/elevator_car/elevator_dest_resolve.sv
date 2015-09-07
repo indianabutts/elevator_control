@@ -22,9 +22,9 @@ module elevator_direction_resolver(
    // Then check compared to current_direction, if matches, then continue in same direction
    // Else change direction.
 
-   assign l_up = (queue_status[6:current_floor] || 1'b1);
+   assign l_up = ({queue_status,7'h00}[current_floor +:7] || 1'b1);
    
-   assign l_down = (queue_status[current_floor:0] || 1'b1);
+   assign l_down = ({7'h00,queue_status}[current_floor -: 7] || 1'b1);
    
    always_comb
      begin:"NEXT_DIRECTION"

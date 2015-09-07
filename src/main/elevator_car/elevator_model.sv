@@ -48,8 +48,6 @@ module elevator_model(
 	  end
 	else
 	  begin
-	     current_up_ndown<=next_up_ndown;
-	     
 	     case(state)
 	       2'b00://PARKED
 		 begin
