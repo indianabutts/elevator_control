@@ -31,29 +31,30 @@ module building_dispatcher (
    assign abs_elev_2_distance = (signed_elev_2_distance[3]===1'b1)? -signed_elev_2_distance:signed_elev_2_distance;
    
    
-   assign candidate_dispatch_elev_1 = !(relative_elev_1 ^ request_dir) & current_dir_elev_1;
-   assign candidate_dispatch_elev_2 = !(relative_elev_2 ^ request_dir) & current_dir_elev_2; 
+   assign candidate_dispatch_elev_1 = (relative_elev_1===1 & (request_dir === current_dir_elev_1));
+   assign candidate_dispatch_elev_2 = (relative_elev_2===1 & (request_dir === current_dir_elev_2)); 
 
-   assign relative_elev_1 = !((current_floor_elev_1<request_floor) ^ current_dir_elev_1);
-   assign relative_elev_2 = !((current_floor_elev_2<request_floor) ^ current_dir_elev_2);
+   assign relative_elev_1 = ((current_floor_elev_1<request_floor) === current_dir_elev_1);
+   assign relative_elev_2 = ((current_floor_elev_2<request_floor) === current_dir_elev_2);
    
 
-   always_comb
+	   always_comb
      begin
-	if(candidate_dispatch_elev_1 & candidate_dispatch_elev_2)
+	if(candidate_dispatch_elev_1 === candidate_dispatch_elev_2)
 	  begin
 	     if(abs_elev_1_distance<abs_elev_2_distance)
 	       begin
-		  dispatch_elev={1'b1,1'b0};
+		  dispatch_elev=2'b01;
 	       end
 	     else
 	       begin
-		  dispatch_elev={1'b0,1'b1};
+		  dispatch_elev=2'b10;
 	       end
 	  end
+
 	else
 	  begin
-	     dispatch_elev={candidate_dispatch_elev_1,candidate_dispatch_elev_2};
+	     dispatch_elev={candidate_dispatch_elev_2,candidate_dispatch_elev_1};
 	  end
      end 
    
