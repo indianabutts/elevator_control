@@ -44,9 +44,23 @@ module elevator_direction_resolver_tb;
 	       queue_status<=7'b0000000;
 	    end
 	  2:
+begin 
+
+queue_status<=7'b0000011;
+end
+	  3:
+begin 
+
+queue_status<=7'b1100000;
+end	
+	  4:
+begin 
+
+queue_status<=7'b1100011;
 end		
 	  5:
 begin 
+
 queue_status<=7'b0000000;
 current_up_ndown<=1;
 end	
