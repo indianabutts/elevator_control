@@ -2,7 +2,7 @@ import csv, sys, getopt
 with open('test.csv', 'rb') as csvfile:
      spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
      i=1;
-     out_f = open('myfile.sv','w')
+     out_f = open('building_dispatcher_tb.sv','w')
      output = "`timescale 1ns/1ps\n"
      output += "module building_dispatcher_tb;\n"
      output += "\tlogic        current_dir_elev_1;\n"
