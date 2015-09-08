@@ -48,11 +48,6 @@ module elevator_input_panel
 	    end
 	endcase // case (buttons)
      end // always_comb
-
-
-   //Since queue_status is a registered output from the queue,
-   //we dont need to make it an ff block here.
-   assign button_panel_light = queue_status;
    
    
    always_ff@(posedge clk or posedge reset)

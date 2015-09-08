@@ -3,7 +3,6 @@
 
 module elevator_model(
 		      input logic 	 clk,
-		      input logic 	 time_unit,
 		      input logic 	 reset,
 		      input logic 	 queue_empty,
 		      input logic 	 next_up_ndown,
@@ -17,9 +16,10 @@ module elevator_model(
    logic 				 stop_next;
    logic 				 time_unit;
    logic [19:0] 			 time_unit_divider;
+   logic [1:0] 				 state;
    
    always_ff@(posedge clk)
-     begin:"TIME_DIVIDER"
+     begin
 	if(reset)
 	  begin
 	     time_unit<=0;
@@ -40,7 +40,7 @@ module elevator_model(
      end
    
    always_ff@(posedge clk)
-     begin:"MAIN_FSM"
+     begin
 	if(reset)
 	  begin
 	     current_up_ndown<=0;
@@ -114,7 +114,8 @@ module elevator_model(
 				end
 			      else
 				begin
-				   current_floor--
+				   current_floor--;
+				   
 				end
 			   end
 		      end // if (!stop_next)
