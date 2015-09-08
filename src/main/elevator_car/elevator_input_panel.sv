@@ -9,10 +9,8 @@ module elevator_input_panel
     input logic 		   clk,
     input logic 		   reset,
     input logic [6:0]  buttons,
-    input logic [6:0]  queue_status,
     output logic	r_nwr,
-    output logic [2:0] 		 requested_floor,
-    output logic [6:0] button_panel_light 		  
+    output logic [2:0] 		 requested_floor		  
     );
 
    logic [2:0] 			   button_panel_to_binary;
@@ -69,7 +67,7 @@ module elevator_input_panel
 	     //If a bitwise OR results in a 1 on a clockedge
 	     //it means that a button has been pressed
              r_nwr<=1'b1;
-	     if((buttons || 1'b1)=== 1'b1)
+	     if((buttons || 1'b0)=== 1'b1)
 	       begin
 		  requested_floor<=button_panel_to_binary;
 		  r_nwr<=1'b0;

@@ -3,13 +3,15 @@
 
 module elevator_model(
 		      input logic 	 clk,
+		      input logic 	 time_unit,
 		      input logic 	 reset,
 		      input logic 	 queue_empty,
 		      input logic 	 next_up_ndown,
 		      input logic [2:0]  default_floor,
 		      input logic [6:0]  queue_status,
 		      output logic 	 current_up_ndown, 
-		      output logic [2:0] current_floor
+		      output logic [2:0] current_floor,
+		      output logic 	 deassert_floor
 		      );
    
    logic 				 stop_next;
@@ -44,6 +46,7 @@ module elevator_model(
 	     current_up_ndown<=0;
 	     current_floor<=default_floor;
 	     stop_next<=0;
+	     deassert_floor<=0;
 	     
 	  end
 	else
@@ -125,6 +128,8 @@ module elevator_model(
 		 end
 	       2'b10://DISEMBARK
 		 begin
+		    deassert_floor<=1'b1;
+		    
 		    if(time_unit)
 		      begin
 			 if(queue_empty)
