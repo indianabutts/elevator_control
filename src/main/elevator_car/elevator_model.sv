@@ -69,14 +69,31 @@ module elevator_model(
 				if((default_floor<current_floor))
 				  begin
 				     current_floor--;
+				     current_up_ndown<=0;
 				       end
 				else
 				  begin
 				     current_floor++;
+				     current_up_ndown<=1;
 				  end
 			     end
 			     
-			end
+			end // if (current_floor!=default_floor)
+		      else
+			begin
+			   if(current_floor===6)
+			     begin
+				current_up_ndown<=0;
+				
+			     end
+			   else
+			     begin
+				current_up_ndown<=1;
+				
+			     end
+			   
+			end // else: !if(current_floor!=default_floor)
+		      
 		   end
 		 end
 	       2'b01://PREPARE TO MOVE
