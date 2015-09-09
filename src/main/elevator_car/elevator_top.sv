@@ -20,13 +20,36 @@ module elevator_top(
 
    logic 			      muxed_r_nwr;
    logic [2:0] 			      muxed_req_floor;
-
-   assign muxed_r_nwr = (hall_r_nwr ===1'b1) ? 1'b1:r_nwr;
-   assign muxed_req_floor = (hall_r_nwr) ? hall_request_floor : requested_floor;
   
    assign current_dir_out = current_up_ndown;
    assign current_floor_out = current_floor;
+
+    always_comb
+     begin
+	if(deassert_floor)
+	  begin
+	     muxed_r_nwr=1'b0;
+	  end
+	else 
+	  begin
+	      muxed_r_nwr = (hall_r_nwr ===1'b0) ? 1'b0:r_nwr;
+	  end
+     end
+
+
+   //TODO CHECK INDEXING OF FLOORS AND QUEUING
    
+   always_comb
+     begin
+	if(deassert_floor)
+	  begin
+	     muxed_req_floor= current_floor;
+	  end
+	else 
+	  begin
+	     muxed_req_floor = (hall_r_nwr===1'b0) ? hall_request_floor : requested_floor;
+	  end
+     end
    
    
    elevator_model MODEL (.*);

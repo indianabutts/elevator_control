@@ -42,8 +42,8 @@ module top(
 	
      end
    
-   assign r_nwr_1 = (dispatch_elev[0]===1'b1) & request===1'b1;
-   assign r_nwr_2 = (dispatch_elev[1]===1'b1) & request===1'b1;
+   assign r_nwr_1 = !((dispatch_elev[0]===1'b1) & request===1'b1);
+   assign r_nwr_2 = !((dispatch_elev[1]===1'b1) & request===1'b1);
    
    building_dispatcher DISPATCH(.*);
    
@@ -52,7 +52,7 @@ module top(
 			     .reset(reset),
 			     .hall_r_nwr(r_nwr_1),
 			     .default_floor(default_floor_1),
-			     .hall_request_floor(hall_request_floor),
+			     .hall_request_floor(request_floor),
 			     .current_dir_out(current_dir_elev_1),
 			     .current_floor_out(current_floor_elev_1)
 			     );
@@ -62,7 +62,7 @@ module top(
 			     .reset(reset),
 			     .hall_r_nwr(r_nwr_2),
 			     .default_floor(default_floor_2),
-			     .hall_request_floor(hall_request_floor),		
+			     .hall_request_floor(request_floor),		
 			     .current_dir_out(current_dir_elev_2),
 			     .current_floor_out(current_floor_elev_2)
 			     );    
