@@ -55,7 +55,7 @@ module elevator_input_panel
 	if(reset)
 	  begin
 	requested_floor<=0;
-	r_nwr<=0;
+	r_nwr<=1;
 	  end
 	else
 	  begin

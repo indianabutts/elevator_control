@@ -18,11 +18,12 @@ module elevator_model(
    logic [19:0] 			 time_unit_divider;
    logic [1:0] 				 state;
    
-   always_ff@(posedge clk)
+   always_ff@(posedge clk or posedge reset)
      begin
 	if(reset)
 	  begin
 	     time_unit<=0;
+	     time_unit_divider<=0;
 	     
 	  end
 	else
@@ -30,7 +31,7 @@ module elevator_model(
 	     time_unit_divider++;
 	     time_unit<=0;
 	     
-	     if(time_unit_divider===1000000)
+	     if(time_unit_divider===10)
 	       begin
 		  time_unit<=1;
 		  time_unit_divider<=0;
@@ -39,14 +40,15 @@ module elevator_model(
 	  end
      end
    
-   always_ff@(posedge clk)
+   always_ff@(posedge clk or posedge reset)
      begin
 	if(reset)
 	  begin
 	     current_up_ndown<=0;
-	     current_floor<=default_floor;
+	     current_floor<=0;
 	     stop_next<=0;
 	     deassert_floor<=0;
+	     state<=0;
 	     
 	  end
 	else

@@ -4,8 +4,8 @@ module elevator_direction_resolver_tb;
    logic [6:0] queue_status;
    logic [2:0] current_floor;
    logic       queue_empty;
-   logic       next_up_ndown;
-
+   logic       next_up_ndown; 
+    logic clk;
    int 	       stim_counter = 0;
    
    elevator_direction_resolver DIR_DUT (.*);
