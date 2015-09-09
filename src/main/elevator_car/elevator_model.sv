@@ -17,7 +17,7 @@ module elevator_model(
    logic 				 time_unit;
    logic [19:0] 			 time_unit_divider;
    logic [1:0] 				 state;
-   
+   logic 				 time
    always_ff@(posedge clk or posedge reset)
      begin
 	if(reset)
@@ -28,8 +28,12 @@ module elevator_model(
 	  end
 	else
 	  begin
-	     time_unit_divider++;
-	     time_unit<=0;
+	     if(time_div_true)
+	       begin
+		  time_unit_divider++;
+	       end
+		  time_unit<=0;
+		  
 	     
 	     if(time_unit_divider===10)
 	       begin

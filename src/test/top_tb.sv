@@ -27,6 +27,12 @@ always #10 clk = !clk;
 	    begin
 	       traffic_state<=0;
 	    end
+	  6:
+	    begin
+	       request_floor<=1;
+	       request_dir<=1;
+	       
+	    end
 	endcase // case (stim_counter)
 	
 
