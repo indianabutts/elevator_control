@@ -18,6 +18,8 @@ module top_tb;
    
    logic [6:0] tb_button_panel_1;
    logic [6:0] tb_button_panel_2;
+
+    enum {MORNING,,LUNCH,NORMAL} traffic_pattern;
    
    //Signals needed to figure out when the passenger will
    // issue a command from inside the elevator
@@ -31,8 +33,9 @@ module top_tb;
    //Force the button panel to select the target destination
    force DUT.ELEVATOR_1.PANEL.buttons = tb_button_panel_1;
    force DUT.ELEVATOR_2.PANEL.buttons = tb_button_panel_2;
-   
-   
+
+
+   //http://www.asicguru.com/system-verilog/sv-classes/simple-class/90/
    
    top DUT (.*);
 
@@ -48,22 +51,7 @@ module top_tb;
 	request<=0;
 
 	case(stim_counter)
-	  0:
-	    begin
-	       traffic_state<=0;
-	    end
-	  65:
-	    begin
-	       request_floor<=3;
-	       request_dir<=1;
-	       request<=1;
-	    end
-	  66:
-	    begin
-	       request_floor<=5;
-	       request_dir<=0;
-	       request<=1;
-	    end
+
 	endcase // case (stim_counter)
 	
 
