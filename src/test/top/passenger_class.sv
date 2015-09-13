@@ -32,7 +32,7 @@ class request;
    constraint request_dist {
       (traffic_kind == MORNING) -> req_kind dist {GOING_UP :=9, GOING_DOWN :=0, INTER :=1};
       (traffic_kind == LUNCH) -> req_kind dist {GOING_UP :=2, GOING_DOWN :=7, INTER :=1};
-      (traffic_kind == NORMAL) -> req_kind dist {GOING_UP :=2, GOING_DOWN := 2, INTER :=6}
+      (traffic_kind == NORMAL) -> req_kind dist {GOING_UP :=2, GOING_DOWN := 2, INTER :=6};
    }
 
    function new(traffic_type kind);
@@ -46,13 +46,13 @@ class request;
    function void setDirection();
       request_direction = (request_floor<start_floor)? 0:1;
       if(request_direction)
-	{
-	 $display("Passenger [%d] Calling from Floor %d, Going Up to Floor %d");
-      }
+	begin
+	   $display("Passenger [%d] Calling from Floor %d, Going Up to Floor %d", id, start_floor, request_floor);
+	end
       else
-	{
-	  $display("Passenger [%d] Calling from Floor %d, Going Down to Floor %d");
-      }
+	begin
+	   $display("Passenger [%d] Calling from Floor %d, Going Down to Floor %d", id,start_floor,request_floor);
+	end
    endfunction // setDirection
    
    
