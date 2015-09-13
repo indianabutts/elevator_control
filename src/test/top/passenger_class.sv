@@ -53,9 +53,7 @@ class request_class;
 	begin
 	   $display("Passenger [%d] Calling from Floor %d, Going Down to Floor %d", id,start_floor,request_floor);
 	end
-   
       $display("Traffic Type %s, Request Type %s ", traffic_kind.name(), req_kind.name());
-      
    endfunction // setDirection
    
    
