@@ -18,37 +18,6 @@ module top_tb;
    logic [2:0] tb_current_floor_2;
    logic [1:0] tb_state_elev_1;
    logic [1:0] tb_state_elev_2;
-   logic       tb_time_unit_1;
-   logic       tb_time_unit_2;
-   
-   logic       tb_current_dir_1;
-   logic       tb_current_dir_2;
-   logic [6:0] tb_button_panel_1;
-   logic [6:0] tb_button_panel_2;
-   
-   //Simulation Parameters
-   int 	       stim_counter;
-   int 	       request_count=100;
-   int 	       traffic_type_counter;`timescale 1ns/1ps
-
-     module top_tb;
-   //import passenger_pkg::*;
-   import passenger_pkg::request_class;
-   import passenger_pkg::request_type;
-   import passenger_pkg::traffic_type;
-   //Control Signals
-   logic clk;
-   logic reset;
-   logic request;
-   logic [1:0] traffic_state;
-   logic [2:0] request_floor;
-   logic       request_dir;
-
-   // Internal Control Signals
-   logic [2:0] tb_current_floor_1;
-   logic [2:0] tb_current_floor_2;
-   logic [1:0] tb_state_elev_1;
-   logic [1:0] tb_state_elev_2;
    logic       tb_current_dir_1;
    logic       tb_current_dir_2;
    logic [6:0] tb_button_panel_1;
@@ -69,27 +38,7 @@ module top_tb;
    
    request_class temp_request;
    traffic_type traffics;
-   //Signals needed to figure out when the passenger will
-   // issue a command from inside the elevator
-   assign tb_current_floor_1 = DUT.current_floor_elev_1;
-   assign tb_current_floor_2 = DUT.current_floor_elev_2;
-   assign tb_state_elev_1 = DUT.ELEVATOR_1.MODEL.state;
-   assign tb_state_elev_2 = DUT.ELEVATOR_2.MODEL.state;
-   assign tb_current_dir_1 = DUT.current_dir_elev_1;
-   assign tb_current_dir_2 = DUT.current_dir_elev_2;
    
-   //Force the button panel to select the target destination
-   // force DUT.ELEVATOR_1.PANEL.buttons = tb_button_panel_1;
-   //force DUT.ELEVATOR_2.PANEL.buttons = tb_button_panel_2;
-   request_class initial_queue[$:299] = {};
-   request_class elev_1_queue[$:99] = {} ;
-   request_class elev_2_queue[$:99] = {};
-   request_class hall_queue[$:99]=  {};
-   
-   request_class current_request;
-   
-   request_class temp_request;
-   traffic_type traffics;
    //Signals needed to figure out when the passenger will
    // issue a command from inside the elevator
    assign tb_current_floor_1 = DUT.current_floor_elev_1;

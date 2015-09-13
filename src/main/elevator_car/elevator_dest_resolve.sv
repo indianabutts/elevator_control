@@ -21,9 +21,9 @@ module elevator_direction_resolver(
    // Then check compared to current_direction, if matches, then continue in same direction
    // Else change direction.
    assign padded_queue = {7'h00,queue_status,7'h00};
-   assign l_down = (padded_queue[(current_floor+7) +:7] | 1'b0) ? 1'b1 : 0;
+   assign l_down = (padded_queue[(current_floor+7) -:7] | 1'b0) ? 1'b1 : 0;
    
-   assign l_up = (padded_queue[(current_floor+7) -: 7] | 1'b0) ? 1'b1 : 0; 
+   assign l_up = (padded_queue[(current_floor+7) +: 7] | 1'b0) ? 1'b1 : 0; 
    
    always_comb
      begin
