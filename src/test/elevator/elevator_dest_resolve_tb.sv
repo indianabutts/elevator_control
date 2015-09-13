@@ -1,48 +1,68 @@
-// Destination Resolver
-// Looks at Queue and Figures out where to go next.
+module elevator_direction_resolver_tb;
 
-
-module elevator_direction_resolver(
-			     input logic       current_up_ndown,
-			     input logic [6:0] queue_status,
-			     input logic [2:0] current_floor,
-			     output logic      queue_empty,
-			     output logic      next_up_ndown
-			     );
-
-   logic 				       l_up;
-   logic 				       l_down;
-   logic	[20:0] padded_queue;
-   ///Simplyify This to only check the direction of the queue,
-   // A Simpler module will determine if the next level is part of the queue to stop the vehicle.
-   // The algorithm is simple
-   // Check current-floor up to the top, if there is a 1, then direction up is true,
-   // check current floor to 0, if there is a 1, down is also true,
-   // Then check compared to current_direction, if matches, then continue in same direction
-   // Else change direction.
-   assign padded_queue = {7'h00,queue_status,7'h00};
-   assign l_down = (padded_queue[(current_floor+7) +:7] | 1'b0) ? 1'b1 : 0;
+   logic current_up_ndown;
+   logic [6:0] queue_status;
+   logic [2:0] current_floor;
+   logic       queue_empty;
+   logic       next_up_ndown; 
+    logic clk;
+   int 	       stim_counter = 0;
    
-   assign l_up = (padded_queue[(current_floor+7) -: 7] | 1'b0) ? 1'b1 : 0; 
-   
-   always_comb
+   elevator_direction_resolver DIR_DUT (.*);
+
+   //Set the initial conditions for the testbench
+   initial
      begin
-	if(l_up & !l_down)
-	  begin
-	     next_up_ndown=1'b1;
-	  end
-	else if (l_down & !l_up)
-	  begin
-	     next_up_ndown=1'b0;	     
-	  end
-	else if (l_down & l_up )
-	  begin
-	     next_up_ndown = l_up & current_up_ndown;   
-	  end
-	queue_empty = !(l_up | l_down);
+	$display("Simulation Started");
+	clk = 1'b0;
      end
    
+   always #10 clk = ~clk; // generate a clock
    
+   //8 main test cases based on the truth table
+   // with | current | l_up | l_down | as the inputs
+   
+   always_ff@(posedge clk)
+     begin
+	
+	case(stim_counter)
+	  0:
+	    begin
+	       
+	       queue_status<=7'b0000000;
+	       current_floor<=4;
+	       current_up_ndown<=0;
+	    end
+	  1:
+	    begin
+	       queue_status<=7'b0000000;
+	    end
+	  2:
+	    begin 
+	       
+	       queue_status<=7'b0000011;
+	    end
+	  3:
+	    begin 
+	       queue_status<=7'b1100000;
+	    end	
+	  4:
+	    begin 
+	       queue_status<=7'b1100011;
+	    end		
+	  5:
+	    begin 	       
+	       queue_status<=7'b0000000;
+	       current_up_ndown<=1;
+	    end	
+	endcase // case (stim_counter)
+	stim_counter++;
+	if(stim_counter==6)
+	  begin
+	     stim_counter<=1;
+	  end	
+	
+     end
    
 endmodule // elevator_direction_resolver
 

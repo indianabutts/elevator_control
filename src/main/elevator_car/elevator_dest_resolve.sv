@@ -12,7 +12,7 @@ module elevator_direction_resolver(
 
    logic 				       l_up;
    logic 				       l_down;
-   
+   logic	[20:0] padded_queue;
    ///Simplyify This to only check the direction of the queue,
    // A Simpler module will determine if the next level is part of the queue to stop the vehicle.
    // The algorithm is simple
@@ -20,13 +20,10 @@ module elevator_direction_resolver(
    // check current floor to 0, if there is a 1, down is also true,
    // Then check compared to current_direction, if matches, then continue in same direction
    // Else change direction.
+   assign padded_queue = {7'h00,queue_status,7'h00};
+   assign l_down = (padded_queue[(current_floor+7) +:7] | 1'b0) ? 1'b1 : 0;
    
-   assign l_down = ({queue_status,7'h00}[current_floor +:7] || 1'b0) ? 1 : 0;
-   
-   assign l_up = ({7'h00,queue_status}[(current_floor+7) -: 7] || 1'b0) ? 1 : 0;
-   
-   
-   
+   assign l_up = (padded_queue[(current_floor+7) -: 7] | 1'b0) ? 1'b1 : 0; 
    
    always_comb
      begin
