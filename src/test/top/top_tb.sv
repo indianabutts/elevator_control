@@ -1,6 +1,10 @@
 `timescale 1ns/1ps
-module top_tb;
 
+module top_tb;
+   //import passenger_pkg::*;
+    import passenger_pkg::request_class;
+    import passenger_pkg::request_type;
+    import passenger_pkg::traffic_type;
    //Control Signals
    logic clk;
    logic reset;
@@ -25,12 +29,14 @@ module top_tb;
    int 	       traffic_type_counter;
    
    
-   traffic_type traffic_kind;
-   request hall_queue [$];
-   request elev_1_queue [$];
-   request elev_2_queue [$];
-   
-   
+  
+   request_class hall_queue[$:99] = {};
+   request_class elev_1_queue[$:99] = {} ;
+   request_class elev_2_queue[$:99] = {};
+
+    
+   	request_class temp_request;
+   	traffic_type traffics;
    //Signals needed to figure out when the passenger will
    // issue a command from inside the elevator
    assign tb_current_floor_1 = DUT.current_floor_elev_1;
@@ -38,11 +44,11 @@ module top_tb;
    assign tb_state_elev_1 = DUT.ELEVATOR_1.MODEL.state;
    assign tb_state_elev_2 = DUT.ELEVATOR_2.MODEL.state;
    assign tb_current_dir_1 = DUT.current_dir_elev_1;
-   assign tb_current_dir_2 - DUT.current_dir_elev_2;
+   assign tb_current_dir_2 = DUT.current_dir_elev_2;
    
    //Force the button panel to select the target destination
-   force DUT.ELEVATOR_1.PANEL.buttons = tb_button_panel_1;
-   force DUT.ELEVATOR_2.PANEL.buttons = tb_button_panel_2;
+  // force DUT.ELEVATOR_1.PANEL.buttons = tb_button_panel_1;
+   //force DUT.ELEVATOR_2.PANEL.buttons = tb_button_panel_2;
 
    
 
@@ -52,6 +58,9 @@ module top_tb;
 
    initial
      begin
+
+
+
 	clk=0;
 	reset=1;
 	#10 reset = 0;
@@ -62,17 +71,22 @@ module top_tb;
    always_ff@(posedge clk)
      begin
 
-	if (hall_queue.size() < 10)
+	if (hall_queue.size() < 100)
 	  begin
-	     for (int i = hall_queue.size() ; i < 10; i ++) 
+	     	traffics =  traffics.next();
+	     for (int i = hall_queue.size() ; i < 100; i ++) 
 	       begin
-		  request temp_request = new();
+		 temp_request = new(traffics);
 		  temp_request.randomize();
-		  temp_request.setDirection();
-		  hall_queue.push_front(temp_request);
+	         temp_request.setDirection();
+		 hall_queue.push_front(temp_request);
 	       end
 	     
-	  end
+	  end // if (hall_queue.size() < 100)
+	
+
+	$finish;
+	
 	
      end
 
