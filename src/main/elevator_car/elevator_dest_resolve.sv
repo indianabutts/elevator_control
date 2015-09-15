@@ -27,6 +27,7 @@ module elevator_direction_resolver(
    
    always_comb
      begin
+	  next_up_ndown = 1'b0;
 	if(l_up & !l_down)
 	  begin
 	     next_up_ndown=1'b1;

@@ -46,6 +46,10 @@ module elevator_input_panel
 	    begin
 	       button_panel_to_binary = 3'b110;
 	    end
+		 default:
+		 begin
+			button_panel_to_binary = 0;
+		 end
 	endcase // case (buttons)
      end // always_comb
    
